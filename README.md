@@ -72,7 +72,7 @@ api("com.github.skjolber.android-nfc-lifecycle-wrapper:androidx:${jsonLogFilterV
 ## Usage
 If you prefer a working appliction, see the [example]. 
 
-The library relies on registering a `Application.ActivityLifecycleCallbacks` instance. 
+The library relies on registering an `Application.ActivityLifecycleCallbacks` instance in the main `Application` (see further down). 
 
 Activities wanting to interact with NFC must add the interface `NfcActivity` or `NfcCompatActivity` and use the `NfcFactory` passed in the`onPreCreated` or `onPostCreated` methods to configure the desired NFC nature:
 
@@ -109,7 +109,7 @@ nfcFactory.newForegroundDispatchBuilder()
 and keep the resulting built `NfcForegroundDispatch` instance if you want to enable/disable or ignore NFC events.
 
 ### Reader callback
-Create a `NfcForegroundDispatchBuilder` and pass in the desired (lambda) functions:
+Create a `ReaderCallbackBuilder` and pass in the desired (lambda) functions:
 
 ```java
 nfcFactory.newReaderCallbackBuilder()
