@@ -1,9 +1,10 @@
-package com.github.skjolber.ndef.utility;
+package com.github.skjolber.nfc.lifecycle.utility;
 
 import android.app.Activity;
 import android.app.Application;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -111,6 +112,7 @@ public class NfcActivityLifecycleCallbacks implements Application.ActivityLifecy
      */
 
     public void onActivityPreCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityPreCreated");
         if(activity instanceof NfcActivity) {
             NfcActivity nfcActivity = (NfcActivity) activity;
 
@@ -126,6 +128,7 @@ public class NfcActivityLifecycleCallbacks implements Application.ActivityLifecy
 
     @Override
     public void onActivityPostCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityPostCreated");
         if(activity instanceof NfcActivity) {
             NfcActivity nfcActivity = (NfcActivity)activity;
 

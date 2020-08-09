@@ -1,4 +1,4 @@
-package com.github.skjolber.ndef.example;
+package com.github.skjolber.nfc.lifecycle.example;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,10 +12,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.skjolber.ndef.utility.NfcActivity;
-import com.github.skjolber.ndef.utility.NfcFactory;
-import com.github.skjolber.ndef.utility.NfcReaderCallback;
-import com.github.skjolber.ndef.utility.NfcSettings;
+import com.github.skjolber.nfc.lifecycle.utility.NfcActivity;
+import com.github.skjolber.nfc.lifecycle.utility.NfcFactory;
+import com.github.skjolber.nfc.lifecycle.utility.NfcReaderCallback;
+import com.github.skjolber.nfc.lifecycle.utility.NfcSettings;
 
 /**
  * Activity demonstrating {@linkplain android.nfc.NfcAdapter.ReaderCallback}.
@@ -37,6 +37,7 @@ public class ReaderCallbackActivity extends Activity implements NfcActivity {
 
     @Override
     public void onPostCreated(NfcFactory factory) {
+        Log.d(TAG, "onPostCreated");
         readerCallback = factory.newReaderCallbackBuilder()
                 .withTagDiscovered(tag -> {
                     Log.d(TAG, "withTagDiscovered");

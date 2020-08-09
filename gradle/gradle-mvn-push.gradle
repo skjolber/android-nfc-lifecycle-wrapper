@@ -21,7 +21,7 @@ version = VERSION_NAME
 group = GROUP
 
 def isReleaseBuild() {
-    return VERSION_NAME.contains("SNAPSHOT") == false
+    return !VERSION_NAME.contains("SNAPSHOT")
 }
 
 def getReleaseRepositoryUrl() {
@@ -35,63 +35,67 @@ def getSnapshotRepositoryUrl() {
 }
 
 def getRepositoryUsername() {
-    return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
+    return hasProperty('SONATYPE_NEXUS_USERNAME') ? SONATYPE_NEXUS_USERNAME : ""
 }
 
 def getRepositoryPassword() {
-    return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
+    return hasProperty('SONATYPE_NEXUS_PASSWORD') ? SONATYPE_NEXUS_PASSWORD : ""
 }
 
 def configurePom(pom) {
-    pom.name = POM_NAME
-    pom.packaging = POM_PACKAGING
-    pom.description = POM_DESCRIPTION
-    pom.url = POM_URL
+    pom.withXml {
+        def root = asNode()
 
-    pom.scm {
-        url = POM_SCM_URL
-        connection = POM_SCM_CONNECTION
-        developerConnection = POM_SCM_DEV_CONNECTION
-    }
-
-    pom.licenses {
-        license {
-            name = POM_LICENCE_NAME
-            url = POM_LICENCE_URL
-            distribution = POM_LICENCE_DIST
+        // eliminate test-scoped dependencies (no need in maven central POMs)
+        root.dependencies.removeAll { dep ->
+            dep.scope == "test"
         }
-    }
 
-    pom.developers {
-        developer {
-            id = POM_DEVELOPER_ID
-            name = POM_DEVELOPER_NAME
+        // add all items necessary for maven central publication
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+
+            description POM_DESCRIPTION
+            name POM_NAME
+            url POM_URL
+            organization {
+                name POM_ORGANIZATION_NANE
+                url POM_ORGANIZATION_URL
+            }
+            issueManagement {
+                system 'GitHub'
+                url POM_ISSUE_SYSTEM
+            }
+            licenses {
+                license {
+                    name POM_LICENCE_NAME
+                    url POM_LICENCE_URL
+                    distribution POM_LICENCE_DIST
+                }
+            }
+            scm {
+                url POM_SCM_URL
+                connection POM_SCM_CONNECTION
+                developerConnection POM_SCM_DEV_CONNECTION
+            }
+            developers {
+                developer {
+                    id POM_DEVELOPER_ID
+                    name POM_DEVELOPER_NAME
+                }
+            }
         }
     }
 }
 
 afterEvaluate { project ->
-    publishing {
-        repositories {
-            maven {
-                def releasesRepoUrl = getReleaseRepositoryUrl()
-                def snapshotsRepoUrl = getSnapshotRepositoryUrl()
-                url = isReleaseBuild() ? releasesRepoUrl : snapshotsRepoUrl
-
-                credentials(PasswordCredentials) {
-                    username = getRepositoryUsername()
-                    password = getRepositoryPassword()
-                }
-            }
-        }
-    }
-
     if (project.getPlugins().hasPlugin('com.android.application') ||
             project.getPlugins().hasPlugin('com.android.library')) {
 
         task androidJavadocs(type: Javadoc) {
             source = android.sourceSets.main.java.source
             classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+            classpath += fileTree(dir: "$buildDir/generated/aidl_source_output_dir/release/out/", include:"**/*.java")
             excludes = ['**/*.kt']
         }
 
@@ -130,28 +134,64 @@ afterEvaluate { project ->
         }
     }
 
-    if (project.getPlugins().hasPlugin('com.android.application') ||
-            project.getPlugins().hasPlugin('com.android.library')) {
-
-	    android.libraryVariants.all { variant ->
-		tasks.androidJavadocs.doFirst {
-		    classpath += files(variant.javaCompileProvider.get().classpath.files.join(File.pathSeparator))
-		}
-	    }
+    android.libraryVariants.all { variant ->
+        tasks.androidJavadocs.doFirst {
+            classpath += files(variant.javaCompileProvider.get().classpath.files.join(File.pathSeparator))
+        }
     }
-    publishing.publications.all { publication ->
-        publication.groupId = GROUP
-        publication.version = VERSION_NAME
+    
+    // we only care about the release variant
+    project.android.variantFilter { variant ->
+        if (!variant.buildType.name.equals("release")) {
+            variant.setIgnore(true);
+        } else {
+            def names = variant.flavors*.name
 
-        publication.artifact androidSourcesJar
-        publication.artifact androidJavadocsJar
+            println "Keep variant $variant.name with flavours $names"
+        }
+    }    
 
-        configurePom(publication.pom)
+    publishing {
+        repositories {
+            maven {
+                def releasesRepoUrl = getReleaseRepositoryUrl()
+                def snapshotsRepoUrl = getSnapshotRepositoryUrl()
+                url = isReleaseBuild() ? releasesRepoUrl : snapshotsRepoUrl
+
+                credentials(PasswordCredentials) {
+                    username = getRepositoryUsername()
+                    password = getRepositoryPassword()
+                }
+            }
+        }
+        
+        publications {
+            aar(MavenPublication) {
+                configurePom(pom)
+                groupId GROUP
+                artifactId POM_ARTIFACT_ID
+                version VERSION_NAME
+                        
+                // Tell maven to prepare the generated "*.aar" file for publishing
+                artifact("$buildDir/outputs/aar/${project.getName()}-release.aar") {
+                    builtBy assembleRelease
+                }                        
+                            
+                artifact(androidSourcesJar) {
+                    classifier = 'sources'
+                }
+                artifact(androidJavadocsJar) {
+                    classifier = 'javadoc'
+                }
+            }
+        }
+            
     }
 
     signing {
-        publishing.publications.all { publication ->
-            sign publication
-        }
+        sign publishing.publications
     }
 }
+
+
+

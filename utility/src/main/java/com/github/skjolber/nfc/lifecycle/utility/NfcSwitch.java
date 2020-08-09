@@ -1,4 +1,4 @@
-package com.github.skjolber.ndef.utility;
+package com.github.skjolber.nfc.lifecycle.utility;
 
 public class NfcSwitch {
 

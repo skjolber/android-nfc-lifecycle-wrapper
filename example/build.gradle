@@ -2,10 +2,10 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
-        minSdkVersion 24
+        minSdkVersion 29
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -13,8 +13,13 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // https://developer.android.com/jetpack/androidx/releases/lifecycle#2.2.0-rc02
     buildTypes {
         release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -31,11 +36,19 @@ android {
     }    
 }
 
+ext {
+    ndefToolsForAndroidVersion = '2.0.0'
+    lifecycle_version = '2.2.0'
+    arch_version = "2.1.0"
+}
+
+
 dependencies {
-    api project(':ndef')
     api project(':utility')
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    api("com.github.skjolber.ndef-tools-for-android:ndeftools:${ndefToolsForAndroidVersion}")
+    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
 
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
 }

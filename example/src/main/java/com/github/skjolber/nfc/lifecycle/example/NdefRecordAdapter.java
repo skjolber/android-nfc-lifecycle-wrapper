@@ -17,7 +17,7 @@
  * 
  ****************************************************************************/
 
-package com.github.skjolber.ndef.example;
+package com.github.skjolber.nfc.lifecycle.example;
 
 import java.util.List;
 

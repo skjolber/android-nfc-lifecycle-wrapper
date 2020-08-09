@@ -17,13 +17,12 @@
  * 
  ****************************************************************************/
 
-package com.github.skjolber.ndef.example;
+package com.github.skjolber.nfc.lifecycle.example;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -34,21 +33,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.skjolber.ndef.Message;
-import com.github.skjolber.ndef.MimeRecord;
-import com.github.skjolber.ndef.Record;
 import com.github.skjolber.ndef.externaltype.AndroidApplicationRecord;
-import com.github.skjolber.ndef.externaltype.ExternalTypeRecord;
-import com.github.skjolber.ndef.utility.NfcActivity;
-import com.github.skjolber.ndef.utility.NfcFactory;
-import com.github.skjolber.ndef.utility.NfcForegroundDispatch;
-import com.github.skjolber.ndef.utility.NfcSettings;
+import com.github.skjolber.nfc.lifecycle.utility.NfcActivity;
+import com.github.skjolber.nfc.lifecycle.utility.NfcFactory;
+import com.github.skjolber.nfc.lifecycle.utility.NfcForegroundDispatch;
+import com.github.skjolber.nfc.lifecycle.utility.NfcSettings;
 import com.github.skjolber.ndef.wellknown.TextRecord;
 
 import java.io.IOException;
@@ -79,6 +73,7 @@ public class ForegroundDispatchWriterActivity extends Activity implements NfcAct
 
 	@Override
 	public void onPostCreated(NfcFactory factory) {
+		Log.d(TAG, "onPostCreated");
 		foregroundDispatch = factory.newForegroundDispatchBuilder()
 				.withTagDiscovered( (tag, intent) -> {
 					Log.d(TAG, "withTagDiscovered");

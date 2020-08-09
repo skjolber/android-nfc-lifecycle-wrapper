@@ -1,6 +1,6 @@
-package com.github.skjolber.ndef.utility;
+package com.github.skjolber.nfc.lifecycle.utility;
 
-public interface NfcCompatActivity {
+public interface NfcActivity {
 
     default void onPreCreated(NfcFactory factory) {
     }

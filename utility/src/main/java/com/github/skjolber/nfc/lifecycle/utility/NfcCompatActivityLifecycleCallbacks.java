@@ -1,5 +1,5 @@
-package com.github.skjolber.ndef.utility;
-
+package com.github.skjolber.nfc.lifecycle.utility;
+import android.util.Log;
 import android.app.Activity;
 import android.app.Application;
 import android.nfc.NfcAdapter;
@@ -82,12 +82,21 @@ public class NfcCompatActivityLifecycleCallbacks implements Application.Activity
         this.nfcSystemFeature = nfcSystemFeature;
     }
 
+    @Override
+    public void onActivityPostCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityPostCreated");
+    }
+
     /**
      * Called as the first step of the Activity being created. This is always called before
      * onCreate.
      */
 
+
+
+    @Override
     public void onActivityPreCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityPreCreated");
         if(activity instanceof NfcCompatActivity) {
             if(activity instanceof AppCompatActivity) {
 
@@ -108,11 +117,13 @@ public class NfcCompatActivityLifecycleCallbacks implements Application.Activity
 
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+        Log.d(TAG, "onActivityCreated");
 
     }
 
     @Override
     public void onActivityStarted(@NonNull Activity activity) {
+        Log.d(TAG, "onActivityStarted");
         // do nothing
     }
 

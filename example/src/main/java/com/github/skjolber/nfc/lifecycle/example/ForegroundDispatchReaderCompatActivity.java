@@ -17,17 +17,17 @@
  * 
  ****************************************************************************/
 
-package com.github.skjolber.ndef.example;
+package com.github.skjolber.nfc.lifecycle.example;
 
 import com.github.skjolber.ndef.Message;
 import com.github.skjolber.ndef.MimeRecord;
 import com.github.skjolber.ndef.Record;
 import com.github.skjolber.ndef.externaltype.ExternalTypeRecord;
 
-import com.github.skjolber.ndef.utility.NfcCompatActivity;
-import com.github.skjolber.ndef.utility.NfcFactory;
-import com.github.skjolber.ndef.utility.NfcForegroundDispatch;
-import com.github.skjolber.ndef.utility.NfcSettings;
+import com.github.skjolber.nfc.lifecycle.utility.NfcCompatActivity;
+import com.github.skjolber.nfc.lifecycle.utility.NfcFactory;
+import com.github.skjolber.nfc.lifecycle.utility.NfcForegroundDispatch;
+import com.github.skjolber.nfc.lifecycle.utility.NfcSettings;
 import com.github.skjolber.ndef.wellknown.TextRecord;
 
 import android.nfc.FormatException;
@@ -67,6 +67,7 @@ public class ForegroundDispatchReaderCompatActivity extends AppCompatActivity im
 
 	@Override
 	public void onPostCreated(NfcFactory factory) {
+		Log.d(TAG, "onPostCreated");
 		foregroundDispatch = factory.newForegroundDispatchBuilder()
 				.withNdefDiscovered((ndefMessage, intent) -> {
 					Log.d(TAG, "withNdefDiscovered");
