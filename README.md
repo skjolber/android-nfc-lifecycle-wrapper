@@ -28,7 +28,7 @@ ext {
 add
 
 ```groovy
-api("com.github.skjolber.android-nfc-lifecycle-wrapper:android:${nfcLifecycleWrapper}")
+api("com.github.skjolber.android-nfc-lifecycle-wrapper:android:${nfcLifecycleWrapper}@aar")
 ```
 
 ## Usage
