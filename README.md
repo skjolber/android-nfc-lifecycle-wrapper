@@ -1,5 +1,3 @@
-
-
 # android-nfc-lifecycle-wrapper
 Library for NFC on Android using androidx lifecycle extensions and functional interfaces.
 
@@ -19,54 +17,18 @@ Bugs, feature suggestions and help requests can be filed with the [issue-tracker
 [Apache 2.0]
 
 ## Obtain
-The project is built with [Gradle] and is available on the central Maven repository. 
-
-### Maven
-
-Add the property
-```xml
-<android-nfc-lifecycle-wrapper.version>1.0.0</android-nfc-lifecycle-wrapper>
-```
-
-then add
-
-```xml
-<dependency>
-    <groupId>com.github.skjolber.android-nfc-lifecycle-wrapper</groupId>
-    <artifactId>android</artifactId>
-    <version>${android-nfc-lifecycle-wrapper.version}</version>
-</dependency>
-```
-
-or
-
-```xml
-<dependency>
-    <groupId>com.github.skjolber.android-nfc-lifecycle-wrapper</groupId>
-    <artifactId>androidx</artifactId>
-    <version>${android-nfc-lifecycle-wrapper.version}</version>
-</dependency>
-```
-
-### Gradle
-For
+The project is built with [Gradle] and is available on the central Maven repository. For
 
 ```groovy
 ext {
-  jsonLogFilterVersion = '1.0.0'
+  nfcLifecycleWrapperVersion = '1.0.0'
 }
 ```
 
 add
 
 ```groovy
-api("com.github.skjolber.android-nfc-lifecycle-wrapper:android:${jsonLogFilterVersion}")
-```
-
-or
-
-```groovy
-api("com.github.skjolber.android-nfc-lifecycle-wrapper:androidx:${jsonLogFilterVersion}")
+api("com.github.skjolber.android-nfc-lifecycle-wrapper:android:${nfcLifecycleWrapper}")
 ```
 
 ## Usage
@@ -196,5 +158,7 @@ If using `AppCompatActivity`, prefer `NfcCompatActivityLifecycleCallbacks`, as i
 
 [Apache 2.0]:           https://www.apache.org/licenses/LICENSE-2.0.html
 [issue-tracker]:        https://github.com/skjolber/android-nfc-lifecycle-wrapper/issues
-[Gradle]:                   https://gradle.org/
-[example]:                example
+[Gradle]:               https://gradle.org/
+[example]:              example
+
+
