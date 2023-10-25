@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/skjolber/android-nfc-lifecycle-wrapper.svg)](https://travis-ci.org/skjolber/android-nfc-lifecycle-wrapper)
-
 # android-nfc-lifecycle-wrapper
 Library for NFC on Android using androidx lifecycle extensions and functional interfaces.
 
